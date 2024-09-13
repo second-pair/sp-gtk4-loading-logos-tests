@@ -1,0 +1,3 @@
+[submodule "rust-gtk4-loading-logos"]
+	path = rust-gtk4-loading-logos
+	url = git@github.com:second-pair/rust-gtk4-loading-logos.git
