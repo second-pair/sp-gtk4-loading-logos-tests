@@ -71,6 +71,7 @@ GtkWidget* gui_layout_create (void);
 //  Prototype Callbacks
 void cb_app_main_activate (GtkApplication* theApp, gpointer data);
 void cb_signal_terminate (int sigType);
+void cb_btn_logoAdvance_clicked (GtkButton* theButton, gpointer data);
 
 //  *--</Preparations>--*  //
 
@@ -111,11 +112,15 @@ GtkWidget* gui_layout_create (void)
 {
 	//  Create the top-level container widget.
 	GtkWidget* box_main = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-	gtk_widget_set_halign (box_main, GTK_ALIGN_CENTER);
-	gtk_widget_set_valign (box_main, GTK_ALIGN_CENTER);
-
+	//  Add a title.
+	gtk_box_append (GTK_BOX (box_main), gtk_label_new ("Loading Logos"));
 	//  Add a test child widget.
-	gtk_box_append (GTK_BOX (box_main), gtk_label_new ("Hello, world!\n"));
+	GtkWidget* logo_main = sp_gtk4_loading_logos_create (0);
+	gtk_box_append (GTK_BOX (box_main), logo_main);
+	//  Add a button to advance the logo type.
+	GtkWidget* btn_logoAdvance = gtk_button_new_with_label ("Advance Logo");
+	gtk_box_append (GTK_BOX (box_main), btn_logoAdvance);
+	g_signal_connect (btn_logoAdvance, "clicked", G_CALLBACK (cb_btn_logoAdvance_clicked), logo_main);
 
 	return box_main;
 }
@@ -149,6 +154,17 @@ void cb_signal_terminate (int sigType)
 {
 	gui_keepRunning = 0;
 	exit (0);
+}
+
+void cb_btn_logoAdvance_clicked (GtkButton* theButton, gpointer data)
+{
+	if (data == NULL)
+		return;
+	GtkWidget* theLogo = (GtkWidget*)data;
+	SP_GTK4_LOADING_LOGOS_ENUM_TYPE currType = sp_gtk4_loading_logos_get_type (theLogo);
+	if (++currType > sp_gtk4_loading_logos_max_type ())
+		currType = 0;
+	sp_gtk4_loading_logos_set_type (theLogo, currType);
 }
 
 //  *--</Callbacks>--*  //
