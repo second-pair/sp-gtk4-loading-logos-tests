@@ -83,6 +83,7 @@ run-dbg-arm-linux:  $(PATH_BIN)/$(PROG_NAME).$(TAG_DBG).$(TAG_ARM).$(EXT_PROG_AR
 #  Git Management
 init:
 	git submodule init
+	git submodule update --remote --recursive
 update:
 	git submodule sync --recursive
 	git submodule update --remote --recursive
